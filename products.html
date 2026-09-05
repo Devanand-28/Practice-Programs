@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Rates — Sivamurugan Stores</title>
+    <meta name="description" content="Browse Sivamurugan Stores' grocery categories and today's prices — vegetables, cooking essentials, snacks, beverages, stationery and household needs.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/wallpaperflare_com_wallpaper.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Noto+Sans+Tamil:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body data-page="products">
+    <div class="header">
+        <a href="index.html" class="brand">
+            <div>
+                <h1 class="one">🛒 SIVAMURUGAN STORES</h1>
+                <span class="brand-tamil">சிவமுருகன் ஸ்டோர்</span>
+            </div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html" data-page="home">Home</a></li>
+            <li><a href="products.html" data-page="products">Products</a></li>
+            <li><a href="about.html" data-page="about">About Us</a></li>
+            <li><a href="location.html" data-page="location">Location</a></li>
+            <li><a href="faq.html" data-page="faq">FAQ</a></li>
+            <li><a href="contact.html" data-page="contact">Contact Us</a></li>
+        </ul>
+    </div>
+    <div class="roof-divider"></div>
+
+    <div class="products-header">
+        <span class="eyebrow">Today's Rate Board</span>
+        <h2>Our Products & Prices</h2>
+        <p>Fresh quality and everyday essentials, all under one roof — browse by category or search for an item.</p>
+    </div>
+
+    <div class="category-tabs" id="categoryTabs"></div>
+
+    <div class="search-row">
+        <input type="text" id="productSearch" placeholder="Search for an item, e.g. rice, oil, biscuit...">
+    </div>
+
+    <div class="scan-row">
+        <button type="button" id="receiptScanBtn" class="scan-btn">📷 Scan a list or receipt</button>
+        <input type="file" id="receiptUpload" accept="image/*" capture="environment" hidden>
+        <span class="scan-hint">We'll try to match what's written against the items below and add them to your cart.</span>
+    </div>
+
+    <div class="rate-board" id="rateBoard"></div>
+
+    <!-- Floating cart button -->
+    <button type="button" id="cartFab" class="cart-fab" aria-label="Open cart">
+        🛍️<span class="cart-fab-count" id="cartFabCount" hidden>0</span>
+    </button>
+
+    <!-- Cart drawer -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+        <div class="cart-drawer-head">
+            <h3>Your Cart</h3>
+            <button type="button" id="cartCloseBtn" class="cart-close" aria-label="Close cart">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-drawer-foot">
+            <div class="cart-total-row">
+                <span>Estimated total</span>
+                <span id="cartTotal">₹0</span>
+            </div>
+            <p class="cart-note">Prices are today's rates — final billing happens in-store.</p>
+        </div>
+    </aside>
+
+    <!-- Mock "scanning" overlay -->
+    <div class="scan-overlay" id="scanOverlay">
+        <div class="scan-overlay-box">
+            <div class="scan-spinner"></div>
+            <p id="scanOverlayText">Reading your list…</p>
+        </div>
+    </div>
+
+    <div class="admin-toggle-row">
+        <button type="button" id="adminToggleBtn">Store Owner? Edit Prices</button>
+    </div>
+
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-box">
+            <h3>Manual Price Entry</h3>
+            <p class="admin-sub">Add new items or edit existing ones below. Changes save to this browser automatically and appear on the rate board right away.</p>
+
+            <form class="admin-form" id="addItemForm">
+                <div>
+                    <label for="newItemName">Item name</label>
+                    <input type="text" id="newItemName" placeholder="e.g. Sugar" required>
+                </div>
+                <div>
+                    <label for="newItemCategory">Category</label>
+                    <input type="text" id="newItemCategory" placeholder="e.g. Cooking Essentials" required>
+                </div>
+                <div>
+                    <label for="newItemUnit">Unit</label>
+                    <input type="text" id="newItemUnit" placeholder="e.g. per kg">
+                </div>
+                <div>
+                    <label for="newItemPrice">Price (₹)</label>
+                    <input type="number" id="newItemPrice" placeholder="0" min="0" step="0.5" required>
+                </div>
+                <button type="submit" class="admin-add-btn">+ Add Item</button>
+            </form>
+
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Unit</th>
+                            <th>Price (₹)</th>
+                            <th>In stock</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="admin-actions">
+                <span class="admin-save-note" id="saveNote" style="opacity:0;"></span>
+                <button type="button" class="admin-reset-btn" id="resetDataBtn">Reset to sample data</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <h5>Sivamurugan Stores</h5>
+                <p>Your neighbourhood store in Theni for groceries, snacks and everyday essentials.</p>
+            </div>
+            <div>
+                <h5>Quick Links</h5>
+                <p><a href="products.html">Today's Rates</a></p>
+                <p><a href="about.html">About Us</a></p>
+                <p><a href="location.html">Find Us</a></p>
+                <p><a href="faq.html">FAQ</a></p>
+                <p><a href="contact.html">Contact</a></p>
+            </div>
+            <div>
+                <h5>Store Timings</h5>
+                <p>Mon – Sun</p>
+                <p>6:30 AM – 2:30 PM</p>
+                <p>4:30 PM – 10:30 PM</p>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2026 Sivamurugan Stores, Theni. All rights reserved.</div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
